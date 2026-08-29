@@ -87,12 +87,6 @@ Performance & Resilience
 - Containers	Docker / Docker Compose
 - OS Environment	Linux / WSL2 / Docker Desktop
 
-- Java
-- Spring Boot
-- Docker
-- Kubernetes
-- REST (coordination layer)
-- gRPC (optional / future)
 
 ---
 
