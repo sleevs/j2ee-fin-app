@@ -92,59 +92,10 @@ Performance & Resilience
 
 ## Architecture
 
-```text
-
-                    ┌─────────────────────┐
-                    │    Android Client   │
-                    └──────────┬──────────┘
-                               │
-                               │ HTTPS / REST
-                               ▼
-
-                    ┌─────────────────────┐
-                    │   WebSphere WAS 9   │
-                    │                     │
-                    │  REST API / Java EE │
-                    │                     │
-                    │ OpenTelemetry Agent │
-                    └───────┬───────┬─────┘
-                            │       │
-                     JDBC   │       │ OTLP
-                            │       ▼
-                            │  ┌──────────────────┐
-                            │  │ OTel Collector   │
-                            │  └──────────────────┘
-                            │
-                            ▼
-                    ┌─────────────────────┐
-                    │       IBM DB2       │
-                    │                     │
-                    │      testdb         │
-                    └─────────────────────┘
+![Project Architecture](docs/images/Enterprise_Mission_Critical_Integration_Architecture.png)
 
 
-             Performance Validation
-             ───────────────────────
-
-                    ┌─────────────────┐
-                    │    Apache       │
-                    │     JMeter      │
-                    └────────┬────────┘
-                             │
-                    Concurrent Requests
-                             │
-                             ▼
-                    ┌─────────────────┐
-                    │   WebSphere 9   │
-                    │                 │
-                    │ Thread Pool      │
-                    │ Connection Pool  │
-                    └────────┬────────┘
-                             │
-                             ▼
-                           DB2
-
-```
+---
 
 ## Engineering Focus
 
@@ -161,7 +112,7 @@ The load-testing strategy evaluates:
 - Database: query execution and response time.
 - Resilience: behavior when infrastructure resources become constrained.
 
-
+---
 
 ## Load Test Strategy
 
@@ -171,41 +122,10 @@ Example workload:
 
 JMeter
 
-```text
-JMeter
-   │
-   ├── GET /customers/findAll
-   ├── GET /customers/{id}
-   ├── POST /customers
-   ├── PUT /customers/{id}
-   └── DELETE /customers/{id}
-             │
-             ▼
-        WebSphere 9
-             │
-             ▼
-            DB2
-```
 
 The objective is to progressively increase concurrency and identify the system's saturation point before failures such as connection exhaustion, excessive latency, HTTP errors, or OutOfMemoryError.
 
-
-```text
-WebSphere JVM
-     │
-     │ OpenTelemetry Java Agent
-     │
-     ├── HTTP Spans
-     ├── JDBC Spans
-     └── JVM Metrics
-             │
-             │ OTLP / gRPC
-             ▼
-      OpenTelemetry Collector
-             │
-             ▼
-       Debug / Backend
-```
+---
 
 ## How to Run
 
