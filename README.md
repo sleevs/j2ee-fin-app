@@ -18,6 +18,18 @@ This project addresses the challenge of exposing legacy enterprise services thro
 
 The architecture also focuses on validating the backend under concurrent load, database pressure, and resource contention.
 
+
+
+
+---
+
+## Architecture
+
+![Project Architecture](docs/images/Enterprise_Mission_Critical_Integration_Architecture.png)
+
+
+
+
 ---
 
 ## Solution
@@ -72,27 +84,32 @@ Performance & Resilience
 ## Stack
 
 
-- Layer	Technology
-- Mobile	Android
-- Java / Java EE
-- Server	IBM WebSphere Application Server Traditional 9
-- Java Runtime	Java SE 8
-- Database	IBM DB2
-- 	REST
-- 	JDBC
-- Observability	OpenTelemetry
-- Telemetry Agent	OpenTelemetry Java Agent
-- Collector	OpenTelemetry Collector Contrib
-- Load Testing	Apache JMeter
-- Containers	Docker / Docker Compose
-- OS Environment	Linux / WSL2 / Docker Desktop
+### Development
+- Android Studio
+- Java SE 8
+- Java EE
+- Maven
 
+### Application Server
+- IBM WebSphere Application Server Traditional 9
 
----
+### Database
+- IBM DB2
 
-## Architecture
+### Infrastructure & Virtualization
+- Docker
+- Oracle VirtualBox
+- Debian Linux
 
-![Project Architecture](docs/images/Enterprise_Mission_Critical_Integration_Architecture.png)
+### Observability & Monitoring
+- OpenTelemetry
+- OpenTelemetry Collector
+- OpenTelemetry Protocol (OTLP)
+- Prometheus
+- Grafana
+
+### Performance Testing
+- Apache JMeter
 
 
 ---
@@ -114,7 +131,7 @@ The load-testing strategy evaluates:
 
 ---
 
-## Load Test Strategy
+##### Load Test Strategy
 
 Apache JMeter is used to simulate concurrent mobile clients performing CRUD operations.
 
@@ -142,23 +159,30 @@ IBM WebSphere Application Server 9
 Apache JMeter
 
 
-1. Build the WebSphere Docker Image
+##### 1. Build the WebSphere Docker Image
 
 Build the WebSphere Docker image using Docker Buildx:
 
+```bash
 docker buildx build --load -t websphere-otel:9.0.5.24 .
 
-2. Start the Application Stack
+```
+
+##### 2. Start the Application Stack
 
 Start the application stack in detached mode:
 
+```bash
 docker compose up -d
 
+```
 
 Check the running containers:
 
+```bash
 docker compose ps
 
+```
 
 The expected services are:
 
@@ -167,37 +191,44 @@ db2
 otel-collector
 
 
-3. Build the Java Application
+##### 3. Build the Java Application
 
 Build the Java application using Maven:
 
+```bash
 mvn clean package
 
+```
 
 The generated WAR file will be available under:
 
+```bash
 target/
 
-4. Deploy to WebSphere
+```
+
+##### 4. Deploy to WebSphere
 
 Deploy the generated .war file to IBM WebSphere Application Server 9.
 
 After deployment, the REST API can be accessed through the HTTP/HTTPS ports configured for the WebSphere application server.
 
 
-5. Validate OpenTelemetry
+##### 5. Validate OpenTelemetry
 
 The application is instrumented with the OpenTelemetry Java Agent.
 
 To verify that telemetry is being collected, check the OpenTelemetry Collector logs:
 
+```bash
 docker logs --tail 100 otel-collector
 
+```
 
 HTTP requests and JDBC operations should appear as OpenTelemetry traces.
 
 
-6. Run Load Tests
+##### 6. Run Load Tests
 
 Apache JMeter
  can be used to simulate concurrent clients and evaluate application performance under load.
